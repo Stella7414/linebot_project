@@ -12,8 +12,24 @@ handler = WebhookHandler(LINE_CHANNEL_SECRET)
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    user_input = event.message.text.strip()
+    user_input = event.message.text.strip().lower()
 
+    # 指令回應邏輯
+    if user_input == "1":
+        reply_text = "請輸入 **城市名稱 + 美食類型**（例如：「臺北燒肉」）"
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_text))
+        return
+
+    elif user_input == "2":
+        reply_text = "請 上傳一張圖片"
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_text))
+        return
+    
+    elif user_input == "3":
+        reply_text = "請輸入 路線 出發地 目的地 查詢路線。"
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_text))
+        return
+    # 處理路線查詢
     if user_input.startswith("路線 "):
         try:
             _, origin, destination = user_input.split()
@@ -23,11 +39,15 @@ def handle_message(event):
             reply_text = "❌ 請輸入格式：**路線 出發地 目的地**"
         messages = [reply_text]
 
+    # 預設為餐廳查詢（例如「台北拉麵」）
     elif len(user_input) >= 2:
         messages = search_restaurants(user_input)
+
+    # 無法辨識輸入
     else:
         messages = ["❌ 請輸入 **城市名稱 + 美食類型**（例如：「臺北燒肉」），或使用 路線 出發地 目的地 查詢路線。"]
 
+    # 回應處理（第一則用 reply，後續用 push）
     first_message_sent = False
     for msg in messages:
         if msg.startswith("http"):
@@ -43,6 +63,8 @@ def handle_message(event):
             else:
                 line_bot_api.push_message(event.source.user_id, text_message)
 
+
+# Webhook 註冊
 def setup_webhook(app):
     @app.route("/callback", methods=["POST"])
     def callback():
