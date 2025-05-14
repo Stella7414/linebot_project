@@ -15,20 +15,21 @@ def handle_message(event):
     user_input = event.message.text.strip().lower()
 
     # 指令回應邏輯
-    if user_input == "1":
+    if user_input == "餐廳查詢":
         reply_text = "請輸入 **城市名稱 + 美食類型**（例如：「臺北燒肉」）"
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_text))
         return
 
-    elif user_input == "2":
-        reply_text = "請 上傳一張圖片"
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_text))
-        return
-    
-    elif user_input == "3":
+    elif user_input == "路線查詢":
         reply_text = "請輸入 路線 出發地 目的地 查詢路線。"
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_text))
         return
+
+    elif user_input == "圖片辨識":
+        reply_text = "請 上傳一張圖片"
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_text))
+        return
+
     # 處理路線查詢
     if user_input.startswith("路線 "):
         try:
