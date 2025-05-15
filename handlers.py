@@ -67,6 +67,7 @@ def handle_message(event):
 
 
 # === 圖片處理邏輯 ===
+@handler.add(MessageEvent, message=ImageMessage) 
 def handle_image(event):
     message_id = event.message.id
     content = line_bot_api.get_message_content(message_id)
