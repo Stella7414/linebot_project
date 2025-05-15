@@ -6,7 +6,7 @@ from linebot.exceptions import InvalidSignatureError
 from config import LINE_CHANNEL_ACCESS_TOKEN, LINE_CHANNEL_SECRET
 from google_api.places import search_restaurants
 from google_api.directions import get_route
-from food_vision import recognize_food, get_recipe
+from google_api.food_vision import recognize_food, get_recipe
 
 line_bot_api = LineBotApi(LINE_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(LINE_CHANNEL_SECRET)
