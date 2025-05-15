@@ -6,6 +6,7 @@ from linebot.exceptions import InvalidSignatureError
 from config import LINE_CHANNEL_ACCESS_TOKEN, LINE_CHANNEL_SECRET
 from google_api.places import search_restaurants
 from google_api.directions import get_route
+from food_vision import recognize_food, get_recipe
 
 line_bot_api = LineBotApi(LINE_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(LINE_CHANNEL_SECRET)
@@ -63,6 +64,20 @@ def handle_message(event):
                 first_message_sent = True
             else:
                 line_bot_api.push_message(event.source.user_id, text_message)
+
+
+# === 圖片處理邏輯 ===
+def handle_image(event):
+    message_id = event.message.id
+    content = line_bot_api.get_message_content(message_id)
+    image_data = b''.join(chunk for chunk in content.iter_content(1024))
+    food_name = recognize_food(image_data)
+    if food_name:
+        recipe = get_recipe(food_name)
+        reply = f"您上傳的食物是：{food_name}\n製作過程：\n{recipe}"
+    else:
+        reply = "無法識別圖片中的食物，請再試一次。"
+    line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply))
 
 
 # Webhook 註冊
