@@ -20,7 +20,7 @@ def get_route(origin, destination):
         if data["status"] == "OK":
             steps = data["routes"][0]["legs"][0]["steps"]
             directions = "\n".join([
-                f"{i+1}. {re.sub('<[^<]+?>', '', step['html_instructions'])}"
+                f"{i+1}. {re.sub('<>', '', step['html_instructions'])}"
                 for i, step in enumerate(steps)
             ])
             map_link = f"https://www.google.com/maps/dir/?api=1&origin={origin}&destination={destination}&travelmode=walking"
