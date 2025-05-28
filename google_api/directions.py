@@ -21,7 +21,7 @@ def get_route(origin, destination):
         if data["status"] == "OK":  # 確認回應成功
             steps = data["routes"][0]["legs"][0]["steps"]  # 取得步驟列表（導航指示）
             directions = "\n".join([  # 將每個步驟組成文字，每行為一個步驟
-                f"{i+1}. {re.sub('<[^<]+?>', '', step['html_instructions'])}"  # 移除 HTML 標籤，只保留純文字
+            f"{i+1}. {step['html_instructions'].replace('<b>', '').replace('</b>', '')}"  # 移除 HTML 標籤，只保留純文字
                 for i, step in enumerate(steps)  # 對每個步驟編號與處理
             ])
             # 產生一個 Google Maps 的導覽連結
