@@ -7,7 +7,7 @@ def get_route(origin, destination):
     params = {
         "origin": origin,
         "destination": destination,
-        "mode": "transit",
+        "mode": "walking",
         "language": "zh-TW",
         "key": GOOGLE_MAPS_API_KEY
     }
